@@ -1,0 +1,2 @@
+# FollowBrightness
+Follow brightness

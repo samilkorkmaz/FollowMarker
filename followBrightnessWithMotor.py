@@ -33,8 +33,8 @@ try:
         gray = cv2.GaussianBlur(gray, (radius, radius), 0)
         (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
         #Move marker towards brightness circle center. The marker is modelled as a first order system with PI control
-        tau = 2 #time constant
-        Kp = 1.5 #proprtionality constant
+        tau = 2 #time constant of first order system
+        Kp = 1.5 #proportionality constant
         Ki = 1 #integral constant
         dx = maxLoc[0]-markerX
         dy = maxLoc[1]-markerY

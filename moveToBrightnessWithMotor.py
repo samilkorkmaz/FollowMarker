@@ -24,6 +24,7 @@ circleThickness = 15
 tGetFrame = threading.Thread(target = captureVideo.get_frame, args = [])
 tGetFrame.start()
 
+time.sleep(1) #wait 1s for camera frame to stabilize (initial frame is black)
 while True:
     image = captureVideo.frame.copy()
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

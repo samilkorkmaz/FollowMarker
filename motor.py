@@ -70,4 +70,5 @@ def moveMotorYOneStep(forceFraction):
     sleep(delay_s)
 
 def GPIOCleanup():
+    global GPIO
     GPIO.cleanup() # resets any ports you have used in this program back to input mode

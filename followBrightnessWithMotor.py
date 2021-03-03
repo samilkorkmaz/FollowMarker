@@ -3,7 +3,7 @@
 from videoUtils import CaptureVideo
 from control import generateCommands, Kp
 from firstOrderSystem import calcState
-#from motor import moveMotor, GPIOCleanup, calcDelay_s
+#from motor import moveMotor, GPIOCleanup
 import threading
 import time
 import numpy as np
@@ -38,14 +38,15 @@ try:
         [forceX, forceY, errorStr] = generateCommands(maxLoc, [markerX, markerY], captureVideo.timeStep_s)
         
         [markerX, markerY] = calcState([forceX, forceY], [markerX, markerY], captureVideo.timeStep_s)
-        '''minForceX = 0
+        '''
+        minForceX = 0
         maxForceX = Kp*width/2
         minForceY = 0
         maxForceY = Kp*height/2
-        delayX_s = calcDelay_s(minForceX, maxForceX, forceX)
-        delayY_s = calcDelay_s(minForceY, maxForceY, forceY)
-        moveMotorXOneStep(delayX_s, forceX > 0)
-        moveMotorYOneStep(delayY_s, forceY > 0)
+        forceFractionX = forceX / (maxForceX - minForceX)
+        forceFractionY = forceY / (maxForceY - minForceY)
+        moveMotorXOneStep(forceFractionX)
+        moveMotorYOneStep(forceFractionY)
         time.sleep(.5)'''
         
         image = captureVideo.frame.copy()

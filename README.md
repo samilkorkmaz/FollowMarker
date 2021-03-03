@@ -1,2 +1,2 @@
 # FollowBrightness
-2D platform follows brightness object detected by camera.
+2D platform follows brightest spot detected by camera.

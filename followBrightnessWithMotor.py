@@ -1,6 +1,6 @@
 #Move marker towards brightness circle center with stepper motors
 #Brightness detection from: https://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/
-from captureVideo import CaptureVideo
+from videoUtils import CaptureVideo
 from control import generateCommands
 from firstOrderSystem import calcState
 import threading

@@ -31,7 +31,7 @@ minDelay_s = 1.0 / SPR_Full_Step / 32
 maxDelay_s = 1.0 / SPR_Full_Step / 1
 def calcDelay_s(forceFraction, mode):
     global minDelay_s, maxDelay_s
-    delay_s = minDelay_s + (maxDelay_s - minDelay_s) * forceFraction
+    delay_s = minDelay_s + (maxDelay_s - minDelay_s) * abs(forceFraction)
     if delay_s < 1.0/16.0:
         GPIO.output(mode, RESOLUTION['1/32'])
         return 1.0/32.0

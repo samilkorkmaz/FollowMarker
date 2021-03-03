@@ -52,17 +52,17 @@ def calcDelay_s(forceFraction, mode):
         return 1.0
 
 def moveMotorXOneStep(forceFraction):
+    delay_s = calcDelay_s(forceFraction, MODE_X)
     GPIO.output(DIR_MOTOR_X, forceFraction > 0)
     GPIO.output(STEP_X, GPIO.HIGH)
-    delay_s = calcDelay_s(forceFraction, MODE_X)
     sleep(delay_s)
     GPIO.output(STEP_X, GPIO.LOW)
     sleep(delay_s)
 
 def moveMotorYOneStep(forceFraction):
+    delay_s = calcDelay_s(forceFraction, MODE_Y)
     GPIO.output(DIR_MOTOR_Y, forceFraction > 0)
     GPIO.output(STEP_Y, GPIO.HIGH)
-    delay_s = calcDelay_s(forceFraction, MODE_Y)
     sleep(delay_s)
     GPIO.output(STEP_Y, GPIO.LOW)
     sleep(delay_s)

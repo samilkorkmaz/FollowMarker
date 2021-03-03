@@ -1,6 +1,8 @@
 #Move marker towards brightness circle center with stepper motors
 #Brightness detection from: https://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/
 from captureVideo import CaptureVideo
+from control import generateCommands
+from firstOrderSystem import calcState
 import threading
 import time
 import numpy as np
@@ -14,8 +16,7 @@ centerX = width/2
 centerY = height/2
 markerX = centerX
 markerY = centerY
-integX = 0
-integY = 0
+
 print("width: ", width, ", height: ", height)
 radius = 41 #must be an odd number, or else GaussianBlur will fail
 circleColor = (0, 0, 255) #BGR
@@ -33,25 +34,8 @@ try:
         gray = cv2.GaussianBlur(gray, (radius, radius), 0)
         (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
         #Move marker towards brightness circle center. The marker is modelled as a first order system with PI control
-        tau = 2 #time constant of first order system
-        Kp = 1.5 #proportionality constant
-        Ki = 1 #integral constant
-        dx = maxLoc[0]-markerX
-        dy = maxLoc[1]-markerY
-        propX = Kp*dx #proportianl term in x direction
-        integX = integX + Ki*dx*captureVideo.timeStep_s #integral term in x direction
-        forceX = propX + integX #force in x direction
-        propY = Kp*dy #proportianl term in y direction
-        integY = integY + Ki*dy*captureVideo.timeStep_s #integral term in y direction
-        forceY = propY + integY #force in y direction
-        #Time derivatives for first order system:
-        xDot = (forceX-markerX)/tau
-        yDot = (forceY-markerY)/tau
-        #Euler integration:
-        markerX = markerX + xDot*captureVideo.timeStep_s 
-        markerY = markerY + yDot*captureVideo.timeStep_s
-        
-        errorStr = "dx = %1.0f, dy = %1.0f" % (dx, dy)
+        [forceX, forceY, errorStr] = generateCommands(maxLoc, [markerX, markerY], captureVideo.timeStep_s)
+        [markerX, markerY] = calcState([forceX, forceY], [markerX, markerY], captureVideo.timeStep_s)
         image = captureVideo.frame.copy()
         image = cv2.putText(image, errorStr, (0,100), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA) 
         cv2.drawMarker(image, ((int)(markerX), (int)(markerY)), (255,0,0), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=4, line_type=cv2.LINE_AA)

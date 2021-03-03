@@ -31,7 +31,7 @@ minDelay_s = 1.0 / SPR_Full_Step / 32
 maxDelay_s = 1.0 / SPR_Full_Step / 1
 def calcDelay_s(forceFraction, mode):
     global minDelay_s, maxDelay_s, GPIO, RESOLUTION
-    delay_s = minDelay_s + (maxDelay_s - minDelay_s) * abs(forceFraction)
+    delay_s = minDelay_s + (maxDelay_s - minDelay_s) * forceFraction
     if delay_s < 1.0/16.0:
         GPIO.output(mode, RESOLUTION['1/32'])
         return 1.0/32.0
@@ -51,19 +51,19 @@ def calcDelay_s(forceFraction, mode):
         GPIO.output(mode, RESOLUTION['Full'])
         return 1.0
 
-def moveMotorXOneStep(forceFraction):
+def moveMotorXOneStep(forceFraction, direction):
     global MODE_X, GPIO, DIR_MOTOR_X, STEP_X
     delay_s = calcDelay_s(forceFraction, MODE_X)
-    GPIO.output(DIR_MOTOR_X, forceFraction > 0)
+    GPIO.output(DIR_MOTOR_X, direction)
     GPIO.output(STEP_X, GPIO.HIGH)
     sleep(delay_s)
     GPIO.output(STEP_X, GPIO.LOW)
     sleep(delay_s)
 
-def moveMotorYOneStep(forceFraction):
+def moveMotorYOneStep(forceFraction, direction):
     global MODE_Y, GPIO, DIR_MOTOR_Y, STEP_Y
     delay_s = calcDelay_s(forceFraction, MODE_Y)
-    GPIO.output(DIR_MOTOR_Y, forceFraction > 0)
+    GPIO.output(DIR_MOTOR_Y, direction)
     GPIO.output(STEP_Y, GPIO.HIGH)
     sleep(delay_s)
     GPIO.output(STEP_Y, GPIO.LOW)

@@ -3,7 +3,7 @@
 from videoUtils import CaptureVideo
 from control import generateCommands, Kp
 from firstOrderSystem import calcState
-#from motor import moveMotor, GPIOCleanup
+#from motor import moveMotorXOneStep, moveMotorYOneStep, GPIOCleanup
 import threading
 import time
 import numpy as np
@@ -43,10 +43,14 @@ try:
         maxForceX = Kp*width/2
         minForceY = 0
         maxForceY = Kp*height/2
-        forceFractionX = forceX / (maxForceX - minForceX)
-        forceFractionY = forceY / (maxForceY - minForceY)
-        moveMotorXOneStep(forceFractionX)
-        moveMotorYOneStep(forceFractionY)
+        forceXMag = abs(forceX)
+        forceYMag = abs(forceY)
+        forceXMag_clipped = np.clip(forceXMag, minForceX, maxForceX)
+        forceYMag_clipped = np.clip(forceYMag, minForceY, maxForceY)
+        forceFractionX = (maxForceX - forceXMag_clipped) / (maxForceX - minForceX)
+        forceFractionY = (maxForceY - forceYMag_clipped) / (maxForceY - minForceY)
+        moveMotorXOneStep(forceFractionX, forceX > 0)
+        moveMotorYOneStep(forceFractionY, forceY > 0)
         time.sleep(.5)'''
         
         image = captureVideo.frame.copy()

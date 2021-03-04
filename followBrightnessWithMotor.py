@@ -71,4 +71,5 @@ except KeyboardInterrupt:
 finally:
     captureVideo.run = False #stop video capture thread
     #GPIOCleanup()
+    cv2.destroyAllWindows()
     print("Main thread ended.")

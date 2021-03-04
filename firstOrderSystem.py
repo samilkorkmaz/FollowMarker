@@ -1,6 +1,5 @@
 tau = 2 #time constant of first order system
 def calcState(force, prevState, timeStep_s):
-    global tau
     #Time derivatives for first order system:
     xDot = (force[0] - prevState[0])/tau
     yDot = (force[1] - prevState[1])/tau

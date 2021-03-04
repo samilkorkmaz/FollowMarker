@@ -2,7 +2,8 @@
 #Brightness detection from: https://www.pyimagesearch.com/2014/09/29/finding-brightest-spot-image-using-python-opencv/
 from videoUtils import CaptureVideo
 from control import generateCommands, Kp
-from firstOrderSystem import calcState
+#import firstOrderSystem
+import zeroOrderSystem
 #from motor import moveMotorXOneStep, moveMotorYOneStep, GPIOCleanup
 import threading
 import time
@@ -37,8 +38,9 @@ try:
         #Move marker towards brightness circle center. The marker is modelled as a first order system with PI control
         [forceX, forceY, errorStr] = generateCommands(maxLoc, [markerX, markerY], captureVideo.timeStep_s)
         
-        [markerX, markerY] = calcState([forceX, forceY], [markerX, markerY], captureVideo.timeStep_s)
-        '''
+        #[markerX, markerY] = firstOrderSystem.#calcState([forceX, forceY], [markerX, markerY], captureVideo.timeStep_s)
+        [markerX, markerY] = zeroOrderSystem.calcState(maxLoc, [markerX, markerY], captureVideo.timeStep_s)
+        
         minForceX = 0
         maxForceX = Kp*width/2
         minForceY = 0
@@ -49,8 +51,12 @@ try:
         forceYMag_clipped = np.clip(forceYMag, minForceY, maxForceY)
         forceFractionX = (maxForceX - forceXMag_clipped) / (maxForceX - minForceX)
         forceFractionY = (maxForceY - forceYMag_clipped) / (maxForceY - minForceY)
-        moveMotorXOneStep(forceFractionX, forceX > 0)
-        moveMotorYOneStep(forceFractionY, forceY > 0)
+
+        print("forceX:",forceX,"forceXMag_clipped:",forceXMag_clipped,"maxForceX:", maxForceX, "forceFractionX:",forceFractionX)
+        '''if forceFractionX < 0.99:
+            moveMotorXOneStep(forceFractionX, forceX > 0)
+        if forceFractionY < 0.99:
+            moveMotorXOneStep(forceFractionY, forceY > 0)
         time.sleep(.5)'''
         
         image = captureVideo.frame.copy()

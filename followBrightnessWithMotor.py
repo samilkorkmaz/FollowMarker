@@ -24,8 +24,7 @@ radius = 41 #must be an odd number, or else GaussianBlur will fail
 circleColor = (0, 0, 255) #BGR
 circleThickness = 15
 
-tGetFrame = threading.Thread(target = captureVideo.get_frame, args = [])
-tGetFrame.start()
+threading.Thread(target = captureVideo.get_frame, args = []).start()
 
 time.sleep(2) #wait for camera frame to stabilize (initial frame is black)
 try:

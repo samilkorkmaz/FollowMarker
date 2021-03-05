@@ -48,14 +48,15 @@ try:
         forceYMag = abs(forceY)
         forceXMag_clipped = np.clip(forceXMag, minForceX, maxForceX)
         forceYMag_clipped = np.clip(forceYMag, minForceY, maxForceY)
-        forceFractionX = (maxForceX - forceXMag_clipped) / (maxForceX - minForceX)
-        forceFractionY = (maxForceY - forceYMag_clipped) / (maxForceY - minForceY)
+        forceFractionX = (forceXMag_clipped - minForceX) / (maxForceX - minForceX)
+        forceFractionY = (forceYMag_clipped - minForceY) / (maxForceY - minForceY)
 
-        print("forceX:",forceX,"forceXMag_clipped:",forceXMag_clipped,"maxForceX:", maxForceX, "forceFractionX:",forceFractionX)
-        '''if forceFractionX < 0.99:
+        minSteps = 1
+        maxSteps = 200
+        stepsX = minSteps + round((maxSteps-minSteps)*forceFractionX)
+        print("forceX:",forceX, "forceFractionX:",forceFractionX, "stepsX:", stepsX)
+        '''if forceFractionX > 0.01:
             moveMotorXOneStep(forceFractionX, forceX > 0)
-        if forceFractionY < 0.99:
-            moveMotorXOneStep(forceFractionY, forceY > 0)
         time.sleep(.5)'''
         
         image = captureVideo.frame.copy()

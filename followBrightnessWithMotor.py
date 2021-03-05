@@ -4,7 +4,7 @@ from videoUtils import CaptureVideo
 from control import generateCommands, Kp
 #import firstOrderSystem
 import zeroOrderSystem
-#from motor import moveMotorXOneStep, moveMotorYOneStep, GPIOCleanup
+#from motor import moveMotorX, GPIOCleanup
 import threading
 import time
 import numpy as np
@@ -52,12 +52,12 @@ try:
         forceFractionY = (forceYMag_clipped - minForceY) / (maxForceY - minForceY)
 
         minSteps = 1
-        maxSteps = 200
+        maxSteps = 2*200
         stepsX = minSteps + round((maxSteps-minSteps)*forceFractionX)
         print("forceX:",forceX, "forceFractionX:",forceFractionX, "stepsX:", stepsX)
-        '''if forceFractionX > 0.01:
+        '''if forceFractionX > 0.05:
             moveMotorXOneStep(forceFractionX, forceX > 0)
-        time.sleep(.5)'''
+        time.sleep(.1)'''
         
         image = captureVideo.frame.copy()
         image = cv2.putText(image, errorStr, (0,100), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA) 

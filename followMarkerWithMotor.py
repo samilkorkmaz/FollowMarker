@@ -55,7 +55,7 @@ try:
             stepsX = minSteps + round((maxSteps-minSteps)*forceFractionX)
             print("forceX:",forceX, "forceFractionX:",forceFractionX, "stepsX:", stepsX)
             '''if forceFractionX > 0.05:
-                moveMotorXOneStep(forceFractionX, forceX > 0)
+                moveMotorX(forceFractionX, forceX > 0)
             time.sleep(.1)'''
             
             image = captureVideo.frame.copy()

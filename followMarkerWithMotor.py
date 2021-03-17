@@ -36,7 +36,7 @@ try:
         image = captureVideo.frame.copy()
         [arucoMarkerDetected, xArucoMarkerCenter, yArucoMarkerCenter] = markerUtil.findArucoMarker(image)
         if arucoMarkerDetected:
-            #Move marker towards brightness circle center. The marker is modelled as a first order system with PI control
+            #Generate commands to move camera center towards marker center
             [forceX, forceY, errorStr] = generateCommands([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             
             #[cameraCenterX, cameraCenterY] = firstOrderSystem.#calcState([forceX, forceY], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)

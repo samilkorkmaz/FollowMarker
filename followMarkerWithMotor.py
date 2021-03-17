@@ -63,7 +63,6 @@ try:
             image = captureVideo.frame.copy()
             image = cv2.putText(image, errorStr, (0,100), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA) 
             cv2.circle(image, (xArucoMarkerCenter, yArucoMarkerCenter), radius, circleColor, circleThickness)
-        # display the results of our newly improved method
         cv2.drawMarker(image, (int(cameraCenterX), int(cameraCenterY)), (255,0,0), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=4, line_type=cv2.LINE_AA)
         cv2.imshow("Robust", image)
         if cv2.waitKey(1) & 0xFF == ord('q'):

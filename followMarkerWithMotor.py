@@ -3,13 +3,14 @@ from videoUtils import CaptureVideo
 from control import generateCommands, Kp
 #import firstOrderSystem
 import zeroOrderSystem
-#from motor import moveMotorX, GPIOCleanup
+from motor import moveMotorX, moveMotorY, setForce, GPIOCleanup
 import threading
 import time
 import numpy as np
 import cv2
 import cv2.aruco as aruco
 import markerUtil
+import threading
 
 captureVideo = CaptureVideo()
 
@@ -26,6 +27,8 @@ circleColor = (0, 0, 255) #BGR
 circleThickness = 15
 
 threading.Thread(target = captureVideo.get_frame, args = []).start()
+threading.Thread(target = moveMotorX, args = []).start()
+threading.Thread(target = moveMotorY, args = []).start()
 
 time.sleep(2) #wait for camera frame to stabilize (initial frame is black)
 try:
@@ -49,14 +52,13 @@ try:
             forceYMag_clipped = np.clip(forceYMag, minForceY, maxForceY)
             forceFractionX = (forceXMag_clipped - minForceX) / (maxForceX - minForceX)
             forceFractionY = (forceYMag_clipped - minForceY) / (maxForceY - minForceY)
-
+            #DEBUG
             minSteps = 1
             maxSteps = 2*200
             stepsX = minSteps + round((maxSteps-minSteps)*forceFractionX)
             print("forceX:",forceX, "forceFractionX:",forceFractionX, "stepsX:", stepsX)
-            '''if forceFractionX > 0.05:
-                moveMotorX(forceFractionX, forceX > 0)
-            time.sleep(.1)'''
+            #\DEBUG
+            setForce(forceX, forceFractionX, forceY, forceFractionY)
             
             image = captureVideo.frame.copy()
             image = cv2.putText(image, errorStr, (0,100), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2, lineType=cv2.LINE_AA) 

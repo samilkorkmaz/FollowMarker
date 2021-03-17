@@ -15,3 +15,6 @@ class CaptureVideo:
         while self.run:
             _, self.frame = self.cap.read()
         print("CaptureVideo.get_frame() ended.")
+    
+    def stop(self):
+        self.run = False

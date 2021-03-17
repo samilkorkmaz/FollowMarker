@@ -73,7 +73,7 @@ except KeyboardInterrupt:
     print('CTRL+C pressed.')        
 finally:
     stopMotors()
-    captureVideo.run = False #stop video capture thread
+    captureVideo.stop()
     #GPIOCleanup()
     cv2.destroyAllWindows()
     print("Main thread ended.")

@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 SPR_Full_Step = 200   # Steps per Revolution for Nema 17 stepper motor
 delay_s = 1.0/SPR_Full_Step/16.0 #the smaller the delay, the faster them motor turns
 
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 DIR_MOTOR_X = 20    #X axis motor direction GPIO Pin

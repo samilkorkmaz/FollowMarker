@@ -3,7 +3,7 @@ from videoUtils import CaptureVideo
 from control import generateCommands, Kp
 #import firstOrderSystem
 import zeroOrderSystem
-from motor import moveMotorX, moveMotorY, setForce, GPIOCleanup
+from motor import moveMotorX, moveMotorY, setForce, stopMotors, GPIOCleanup
 import threading
 import time
 import numpy as np
@@ -72,6 +72,7 @@ try:
 except KeyboardInterrupt:
     print('CTRL+C pressed.')        
 finally:
+    stopMotors()
     captureVideo.run = False #stop video capture thread
     #GPIOCleanup()
     cv2.destroyAllWindows()

@@ -23,10 +23,15 @@ g_forceY = 0
 g_forceFractionY = 0
 def setForce(forceX, forceFractionX, forceY, forceFractionY):
     global g_forceX, g_forceFractionX, g_forceY, g_forceFractionY
-    forceX = g_forceX
-    forceFractionX = g_forceFractionX
-    forceY = g_forceY
-    forceFractionY = g_forceFractionY
+    g_forceX = forceX
+    g_forceFractionX = forceFractionX
+    g_forceY = forceY
+    g_forceFractionY = forceFractionY
+    
+keepRunning = True
+def stopMotors():
+    global keepRunning
+    keepRunning = False
 
 #map force to steps using linear interpolation. The larger the force, the more the steps
 def calcStepCount(forceFraction):
@@ -35,26 +40,32 @@ def calcStepCount(forceFraction):
     return minSteps + int(round((maxSteps-minSteps)*forceFraction))
 
 def moveMotorX():
-    if g_forceFractionX > 0.05:
-        steps = calcStepCount(g_forceFractionX)
-        GPIO.output(DIR_MOTOR_X, g_forceX > 0)
-        for _ in range(steps):
-            GPIO.output(STEP_X, GPIO.HIGH)
-            sleep(delay_s)
-            GPIO.output(STEP_X, GPIO.LOW)
-            sleep(delay_s)
-        sleep(0.1)
+    while keepRunning:
+        #print("In moveMotorX(), g_forceFractionX:",g_forceFractionX)
+        if g_forceFractionX > 0.05:
+            steps = calcStepCount(g_forceFractionX)
+            #print("x steps:", steps)
+            GPIO.output(DIR_MOTOR_X, g_forceX > 0)
+            for _ in range(steps):
+                GPIO.output(STEP_X, GPIO.HIGH)
+                sleep(delay_s)
+                GPIO.output(STEP_X, GPIO.LOW)
+                sleep(delay_s)
+            sleep(0.1)
+    print("Stopped motorX")
 
 def moveMotorY():
-    if g_forceFractionY > 0.05:
-        steps = calcStepCount(g_forceFractionY)
-        GPIO.output(DIR_MOTOR_Y, g_forceY > 0)
-        for _ in range(steps):
-            GPIO.output(STEP_Y, GPIO.HIGH)
-            sleep(delay_s)
-            GPIO.output(STEP_Y, GPIO.LOW)
-            sleep(delay_s)
-        sleep(0.1)
+    while keepRunning:
+        if g_forceFractionY > 0.05:
+            steps = calcStepCount(g_forceFractionY)
+            GPIO.output(DIR_MOTOR_Y, g_forceY > 0)
+            for _ in range(steps):
+                GPIO.output(STEP_Y, GPIO.HIGH)
+                sleep(delay_s)
+                GPIO.output(STEP_Y, GPIO.LOW)
+                sleep(delay_s)
+            sleep(0.1)
+    print("Stopped motorY")
 
 def GPIOCleanup():
     GPIO.cleanup() # resets any ports you have used in this program back to input mode

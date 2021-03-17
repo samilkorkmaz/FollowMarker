@@ -34,7 +34,7 @@ def calcStepCount(forceFraction):
     maxSteps = 2*SPR_Full_Step
     return minSteps + int(round((maxSteps-minSteps)*forceFraction))
 
-def moveMotorX(forceFraction, direction):
+def moveMotorX():
     if g_forceFractionX > 0.05:
         steps = calcStepCount(g_forceFractionX)
         GPIO.output(DIR_MOTOR_X, g_forceX > 0)
@@ -45,7 +45,7 @@ def moveMotorX(forceFraction, direction):
             sleep(delay_s)
         sleep(0.1)
 
-def moveMotorY(forceFraction, direction):
+def moveMotorY():
     if g_forceFractionY > 0.05:
         steps = calcStepCount(g_forceFractionY)
         GPIO.output(DIR_MOTOR_Y, g_forceY > 0)

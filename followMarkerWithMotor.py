@@ -40,7 +40,7 @@ try:
             [forceX, forceY, errorStr] = generateCommands([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             
             #[cameraCenterX, cameraCenterY] = firstOrderSystem.#calcState([forceX, forceY], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
-            [cameraCenterX, cameraCenterY] = zeroOrderSystem.calcState([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
+            #[cameraCenterX, cameraCenterY] = zeroOrderSystem.calcState([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             
             minForceX = 0
             maxForceX = Kp*width/2

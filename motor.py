@@ -2,71 +2,72 @@
 from time import sleep
 import RPi.GPIO as GPIO
 
-SPR_Full_Step = 200   # Steps per Revolution for Nema 17 stepper motor
-delay_s = 1.0/SPR_Full_Step/16.0 #the smaller the delay, the faster them motor turns
+class MotorNema:
+    def __init__(self):
+        self.keepRunning = True        
+        self.SPR_Full_Step = 200   # Steps per Revolution for Nema 17 stepper motor
+        self.delay_s = 1.0/self.SPR_Full_Step/16.0 #the smaller the delay, the faster them motor turns
+        self.g_forceX = 0
+        self.g_forceFractionX = 0
+        self.g_forceY = 0
+        self.g_forceFractionY = 0
+        
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+        self.DIR_MOTOR_X = 20    #X axis motor direction GPIO Pin
+        self.STEP_X = 21  # Step GPIO Pin
+        GPIO.setup(self.DIR_MOTOR_X, GPIO.OUT)
+        GPIO.setup(self.STEP_X, GPIO.OUT)
 
-DIR_MOTOR_X = 20    #X axis motor direction GPIO Pin
-STEP_X = 21  # Step GPIO Pin
-GPIO.setup(DIR_MOTOR_X, GPIO.OUT)
-GPIO.setup(STEP_X, GPIO.OUT)
-
-DIR_MOTOR_Y = 15  #Y axis motor direction GPIO Pin
-STEP_Y = 14  # Step GPIO Pin
-GPIO.setup(DIR_MOTOR_Y, GPIO.OUT)
-GPIO.setup(STEP_Y, GPIO.OUT)
-
-g_forceX = 0
-g_forceFractionX = 0
-g_forceY = 0
-g_forceFractionY = 0
-def setForce(forceX, forceFractionX, forceY, forceFractionY):
-    global g_forceX, g_forceFractionX, g_forceY, g_forceFractionY
-    g_forceX = forceX
-    g_forceFractionX = forceFractionX
-    g_forceY = forceY
-    g_forceFractionY = forceFractionY
+        self.DIR_MOTOR_Y = 15  #Y axis motor direction GPIO Pin
+        self.STEP_Y = 14  # Step GPIO Pin
+        GPIO.setup(self.DIR_MOTOR_Y, GPIO.OUT)
+        GPIO.setup(self.STEP_Y, GPIO.OUT)
+        print("Motors initialized.")
     
-keepRunning = True
-def stopMotors():
-    global keepRunning
-    keepRunning = False
+    def stop(self):
+        self.keepRunning = False
 
-#map force to steps using linear interpolation. The larger the force, the more the steps
-def calcStepCount(forceFraction):
-    minSteps = 1
-    maxSteps = 2*SPR_Full_Step
-    return minSteps + int(round((maxSteps-minSteps)*forceFraction))
+    def setForce(self, forceX, forceFractionX, forceY, forceFractionY):
+        self.g_forceX = forceX
+        self.g_forceFractionX = forceFractionX
+        self.g_forceY = forceY
+        self.g_forceFractionY = forceFractionY
 
-def moveMotorX():
-    while keepRunning:
-        #print("In moveMotorX(), g_forceFractionX:",g_forceFractionX)
-        if g_forceFractionX > 0.05:
-            steps = calcStepCount(g_forceFractionX)
-            #print("x steps:", steps)
-            GPIO.output(DIR_MOTOR_X, g_forceX > 0)
-            for _ in range(steps):
-                GPIO.output(STEP_X, GPIO.HIGH)
-                sleep(delay_s)
-                GPIO.output(STEP_X, GPIO.LOW)
-                sleep(delay_s)
-            sleep(0.1)
-    print("Stopped motorX")
+    #map force to steps using linear interpolation. The larger the force, the more the steps
+    def calcStepCount(self, forceFraction):
+        minSteps = 1
+        maxSteps = 2*self.SPR_Full_Step
+        return minSteps + int(round((maxSteps-minSteps)*forceFraction))
 
-def moveMotorY():
-    while keepRunning:
-        if g_forceFractionY > 0.05:
-            steps = calcStepCount(g_forceFractionY)
-            GPIO.output(DIR_MOTOR_Y, g_forceY > 0)
-            for _ in range(steps):
-                GPIO.output(STEP_Y, GPIO.HIGH)
-                sleep(delay_s)
-                GPIO.output(STEP_Y, GPIO.LOW)
-                sleep(delay_s)
-            sleep(0.1)
-    print("Stopped motorY")
+    def moveMotorX(self):
+        while self.keepRunning:
+            #print("In moveMotorX(), g_forceFractionX:",g_forceFractionX)
+            if self.g_forceFractionX > 0.05:
+                steps = self.calcStepCount(self.g_forceFractionX)
+                #print("x steps:", steps)
+                GPIO.output(self.DIR_MOTOR_X, self.g_forceX > 0)
+                for _ in range(steps):
+                    GPIO.output(self.STEP_X, GPIO.HIGH)
+                    sleep(self.delay_s)
+                    GPIO.output(self.STEP_X, GPIO.LOW)
+                    sleep(self.delay_s)
+                sleep(0.1)
+        print("moveMotorX thread ended.\n")
 
-def GPIOCleanup():
-    GPIO.cleanup() # resets any ports you have used in this program back to input mode
+    def moveMotorY(self):
+        while self.keepRunning:
+            if self.g_forceFractionY > 0.05:
+                steps = self.calcStepCount(self.g_forceFractionY)
+                GPIO.output(self.DIR_MOTOR_Y, self.g_forceY > 0)
+                for _ in range(steps):
+                    GPIO.output(self.STEP_Y, GPIO.HIGH)
+                    sleep(self.delay_s)
+                    GPIO.output(self.STEP_Y, GPIO.LOW)
+                    sleep(self.delay_s)
+                sleep(0.1)
+        print("moveMotorY thread ended.\n")
+
+    def GPIOCleanup(self):
+        GPIO.cleanup() # resets any ports you have used in this program back to input mode

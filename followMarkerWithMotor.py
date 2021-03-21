@@ -21,6 +21,10 @@ centerX = width/2
 centerY = height/2
 cameraCenterX = centerX
 cameraCenterY = centerY
+minForceX = 0
+maxForceX = Kp*width/2
+minForceY = 0
+maxForceY = Kp*height/2
 
 print("width: ", width, ", height: ", height)
 radius = 41 #must be an odd number, or else GaussianBlur will fail
@@ -40,13 +44,9 @@ try:
             #Generate commands to move camera center towards marker center
             [forceX, forceY, errorStr] = generateCommands([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             
-            #[cameraCenterX, cameraCenterY] = firstOrderSystem.#calcState([forceX, forceY], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
+            #[cameraCenterX, cameraCenterY] = firstOrderSystem.calcState([forceX, forceY], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             #[cameraCenterX, cameraCenterY] = zeroOrderSystem.calcState([xArucoMarkerCenter, yArucoMarkerCenter], [cameraCenterX, cameraCenterY], captureVideo.timeStep_s)
             
-            minForceX = 0
-            maxForceX = Kp*width/2
-            minForceY = 0
-            maxForceY = Kp*height/2
             forceXMag = abs(forceX)
             forceYMag = abs(forceY)
             forceXMag_clipped = np.clip(forceXMag, minForceX, maxForceX)

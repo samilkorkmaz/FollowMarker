@@ -1,2 +1,2 @@
-# FollowBrightness
-2D motorized platform follows brightest spot detected by camera connected to Raspberry Pi.
+# FollowMarker
+2D motorized platform follows marker detected by camera connected to Raspberry Pi 4B.

@@ -66,7 +66,6 @@ try:
             cv2.circle(image, (xArucoMarkerCenter, yArucoMarkerCenter), radius, circleColor, circleThickness)
         else:
             motors.setForce(0, 0, 0, 0) #temporarily stop motors
-            pass
         cv2.drawMarker(image, (int(cameraCenterX), int(cameraCenterY)), (255,0,0), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=4, line_type=cv2.LINE_AA)
         cv2.imshow("Robust", image)
         if cv2.waitKey(1) & 0xFF == ord('q'):

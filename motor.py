@@ -6,7 +6,7 @@ class MotorNema:
     def __init__(self):
         self.keepRunning = True        
         self.SPR_Full_Step = 200   # Steps per Revolution for Nema 17 stepper motor
-        self.delay_s = 1.0/self.SPR_Full_Step/16.0 #the smaller the delay, the faster them motor turns
+        self.delay_s = 1.0/self.SPR_Full_Step/2 #the smaller the delay, the faster them motor turns
         self.g_forceX = 0
         self.g_forceFractionX = 0
         self.g_forceY = 0
@@ -60,7 +60,7 @@ class MotorNema:
         while self.keepRunning:
             if self.g_forceFractionY > 0.05:
                 steps = self.calcStepCount(self.g_forceFractionY)
-                GPIO.output(self.DIR_MOTOR_Y, self.g_forceY > 0)
+                GPIO.output(self.DIR_MOTOR_Y, self.g_forceY < 0)
                 for _ in range(steps):
                     GPIO.output(self.STEP_Y, GPIO.HIGH)
                     sleep(self.delay_s)

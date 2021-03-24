@@ -6,7 +6,7 @@ class MotorNema:
     def __init__(self):
         self.keepRunning = True        
         self.SPR_Full_Step = 200   # Steps per Revolution for Nema 17 stepper motor
-        self.delay_s = 1.0/self.SPR_Full_Step/2 #the smaller the delay, the faster them motor turns
+        self.delay_s = 1.0/self.SPR_Full_Step/2 #the smaller the delay, the faster the motor turns
         self.g_forceX = 0
         self.g_forceFractionX = 0
         self.g_forceY = 0

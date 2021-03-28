@@ -1,2 +1,2 @@
 # FollowMarker
-2D motorized platform (and old 3D printer) follows marker detected by camera connected to Raspberry Pi 4B with camera and OpenCV.
+2D motorized platform (and old 3D printer) follows marker detected by camera connected to Raspberry Pi 4B with camera and OpenCV. Video: https://www.youtube.com/watch?v=QimyfdblHq4&ab_channel=E%C4%9Fitim
